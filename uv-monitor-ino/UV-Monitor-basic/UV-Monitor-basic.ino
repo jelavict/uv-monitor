@@ -35,6 +35,7 @@
 // On an arduino LEONARDO:   2(SDA),  3(SCL), ...
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 #define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
+
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 int UVsensorIn = A0; //Output from the sensor
 
@@ -44,21 +45,26 @@ void setup() {
   pinMode(UVsensorIn, INPUT);
   Serial.begin(115200); //open serial port, set the baud rate to 9600 bps
 
+
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
     Serial.println(F("SSD1306 allocation failed"));
     for(;;); // Don't proceed, loop forever
   }
 
+
   if(!bmp.begin()){
     /* There was a problem detecting the BMP085 ... check your connections */
     Serial.print("Ooops, no BMP085 detected ... Check your wiring or I2C ADDR!");
     while(1);
   }
+
+  
   displaySensorDetails();
   
   // Show initial display buffer contents on the screen --
   // the library initializes this with an Adafruit splash screen.
+  
   display.display();
   delay(2000); // Pause for 2 seconds
 
@@ -124,7 +130,8 @@ void loop() {
     Serial.print(uvIntensity);
     Serial.print(" mW/cm^2"); 
     Serial.println(); 
-    
+
+   
     //set to the OLED
     display.clearDisplay();
     display.setCursor(0, 0);
@@ -140,6 +147,7 @@ void loop() {
     
     display.display();
     delay(2000);
+    
   }else{
     Serial.println("Sensor error");
   }
